@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/armon/consul-api"
 	"github.com/codegangsta/cli"
+	consulapi "github.com/hashicorp/consul/api"
 )
 
 var (
@@ -29,6 +29,10 @@ var (
 	waitFlag = cli.DurationFlag{
 		Name:  "wait",
 		Usage: "specify time to wait",
+	}
+	tokenFlag = cli.StringFlag{
+		Name:  "acl.token",
+		Usage: "an acl token",
 	}
 )
 
@@ -79,6 +83,20 @@ func queryOptions(c *cli.Context) *consulapi.QueryOptions {
 	}
 }
 
+func writeOptionFlags() []cli.Flag {
+	return []cli.Flag{
+		dcFlag,
+		tokenFlag,
+	}
+}
+
+func writeOptions(c *cli.Context) *consulapi.WriteOptions {
+	return &consulapi.WriteOptions{
+		Datacenter: c.String(dcFlag.Name),
+		Token:      c.String(tokenFlag.Name),
+	}
+}
+
 func nodeName(c *cli.Context) string {
 	name := c.String(nodeFlag.Name)
 	if name == "" {
@@ -95,4 +113,11 @@ func serviceName(c *cli.Context) string {
 		log.Fatal("service is required")
 	}
 	return name
+}
+
+func kvpair(key string, value []byte) *consulapi.KVPair {
+	return &consulapi.KVPair{
+		Key:   key,
+		Value: value,
+	}
 }

@@ -26,6 +26,11 @@ var (
 		Name:  "tag",
 		Usage: "specify a service tag",
 	}
+
+	wanFlag = cli.BoolFlag{
+		Name:  "wan",
+		Usage: "wan protocol",
+	}
 )
 
 func main() {
@@ -40,9 +45,12 @@ func main() {
 	}
 
 	app.Commands = []cli.Command{
+		agentCommand(),
 		catalogCommand(),
-		statusCommand(),
+		eventCommand(),
 		healthCommand(),
+		kvCommand(),
+		statusCommand(),
 	}
 
 	log.SetPrefix("consulctl: ")
