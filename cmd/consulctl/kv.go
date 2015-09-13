@@ -24,6 +24,10 @@ func kvCommand() cli.Command {
 		Name:  "encoded",
 		Usage: "returns the value encoded",
 	}
+	modifyIndexFlag := cli.IntFlag{
+		Name:  "modify-index",
+		Usage: "modify index for the KV pair",
+	}
 
 	return cli.Command{
 		Name:    "key-value",
@@ -48,8 +52,12 @@ func kvCommand() cli.Command {
 					}
 					if !c.Bool(encodedFlag.Name) {
 						decoded := make([]byte, base64.URLEncoding.DecodedLen(len(kv.Value)))
-						base64.URLEncoding.Decode(decoded, kv.Value)
-						kv.Value = decoded
+						_, err := base64.URLEncoding.Decode(decoded, kv.Value)
+						if err != nil {
+							log.Printf("failed to base64 decode: %v", err)
+						} else {
+							kv.Value = decoded
+						}
 					}
 					prettyPrint(kv)
 				},
@@ -69,6 +77,28 @@ func kvCommand() cli.Command {
 						log.Fatalf("failed to fetch key %s: %v", key, err)
 					}
 					prettyPrint("OK")
+				},
+			},
+			cli.Command{
+				Name:    "compare-and-set",
+				Aliases: []string{"cas"},
+				Usage:   "set the value for a given key if it doesn't exist or if the modify index matches",
+				Flags:   append([]cli.Flag{keyFlag, valueFlag, modifyIndexFlag}, writeOptionFlags()...),
+				Action: func(c *cli.Context) {
+					cc := consulClient(c)
+					key := requiredKey(c)
+					value := requiredValue(c)
+					pair := kvpair(key, []byte(value))
+					pair.ModifyIndex = uint64(c.Int(modifyIndexFlag.Name))
+					set, _, err := cc.KV().CAS(pair, writeOptions(c))
+					if err != nil {
+						log.Fatalf("failed to fetch key %s: %v", key, err)
+					}
+					resp := "SET"
+					if !set {
+						resp = "NOT SET"
+					}
+					prettyPrint(resp)
 				},
 			},
 		},
