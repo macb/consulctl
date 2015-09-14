@@ -37,7 +37,7 @@ func healthCommand() cli.Command {
 	return cli.Command{
 		Name:    "health",
 		Aliases: []string{"h"},
-		Usage:   "Health endpoint",
+		Usage:   "health related actions",
 		Action: func(c *cli.Context) {
 			cli.ShowSubcommandHelp(c)
 			os.Exit(1)
@@ -46,7 +46,7 @@ func healthCommand() cli.Command {
 			cli.Command{
 				Name:    "checks",
 				Aliases: []string{"c"},
-				Usage:   "Health checks",
+				Usage:   "list registered health checks for a service",
 				Flags:   append([]cli.Flag{serviceFlag}, queryOptionFlags()...),
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
@@ -61,7 +61,7 @@ func healthCommand() cli.Command {
 			cli.Command{
 				Name:    "node",
 				Aliases: []string{"n"},
-				Usage:   "Node health",
+				Usage:   "retrieve health of a given node",
 				Flags:   append([]cli.Flag{nodeFlag}, queryOptionFlags()...),
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
@@ -76,7 +76,7 @@ func healthCommand() cli.Command {
 			cli.Command{
 				Name:    "service",
 				Aliases: []string{"s"},
-				Usage:   "Service health",
+				Usage:   "retrieve health of a given service",
 				Flags: append([]cli.Flag{
 					serviceFlag,
 					cli.BoolFlag{

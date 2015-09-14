@@ -11,12 +11,12 @@ func statusCommand() cli.Command {
 	return cli.Command{
 		Name:    "status",
 		Aliases: []string{"st"},
-		Usage:   "Status endpoint",
+		Usage:   "status related endpoint",
 		Subcommands: []cli.Command{
 			cli.Command{
 				Name:    "peer",
 				Aliases: []string{"p"},
-				Usage:   "Raft peer set",
+				Usage:   "list raft peer set",
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
 					peers, err := cc.Status().Peers()
@@ -29,7 +29,7 @@ func statusCommand() cli.Command {
 			cli.Command{
 				Name:    "leader",
 				Aliases: []string{"l"},
-				Usage:   "Raft leader",
+				Usage:   "retrieve raft leader",
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
 					leader, err := cc.Status().Leader()

@@ -11,16 +11,16 @@ func catalogCommand() cli.Command {
 	return cli.Command{
 		Name:    "catalog",
 		Aliases: []string{"c"},
-		Usage:   "Catalog endpoint",
+		Usage:   "catalog related actions",
 		Action: func(c *cli.Context) {
 			cli.ShowSubcommandHelp(c)
 			os.Exit(1)
 		},
 		Subcommands: []cli.Command{
 			cli.Command{
-				Name:    "datacaenters",
+				Name:    "datacenters",
 				Aliases: []string{"d"},
-				Usage:   "Datacenter list",
+				Usage:   "list of known datacenters",
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
 					dcs, err := cc.Catalog().Datacenters()
@@ -33,7 +33,7 @@ func catalogCommand() cli.Command {
 			cli.Command{
 				Name:    "nodes",
 				Aliases: []string{"ns"},
-				Usage:   "List of nodes",
+				Usage:   "list of nodes",
 				Flags:   append([]cli.Flag{}, queryOptionFlags()...),
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
@@ -47,7 +47,7 @@ func catalogCommand() cli.Command {
 			cli.Command{
 				Name:    "node",
 				Aliases: []string{"n"},
-				Usage:   "Information for a single node",
+				Usage:   "retrieve information for a given node",
 				Flags:   append([]cli.Flag{nodeFlag}, queryOptionFlags()...),
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
@@ -62,7 +62,7 @@ func catalogCommand() cli.Command {
 			cli.Command{
 				Name:    "service",
 				Aliases: []string{"s"},
-				Usage:   "Information for a single service",
+				Usage:   "retrieve information for a service",
 				Flags:   append([]cli.Flag{serviceFlag, tagFlag}, queryOptionFlags()...),
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
@@ -78,7 +78,7 @@ func catalogCommand() cli.Command {
 			cli.Command{
 				Name:    "services",
 				Aliases: []string{"ss"},
-				Usage:   "List of services",
+				Usage:   "list of known services",
 				Flags:   append([]cli.Flag{}, queryOptionFlags()...),
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
@@ -87,36 +87,6 @@ func catalogCommand() cli.Command {
 						log.Fatalf("failed to fetch services: %v", err)
 					}
 					prettyPrint(services)
-				},
-			},
-			cli.Command{
-				Name:    "register",
-				Aliases: []string{"r"},
-				Usage:   "Register a service",
-				//Flags:   append([]cli.Flag{}, queryOptionFlags()...),
-				Action: func(c *cli.Context) {
-					log.Fatal("TODO: implement")
-					//cc := consulClient(c)
-
-					//if err != nil {
-					//log.Fatalf("failed to fetch services: %v", err)
-					//}
-					//prettyPrint(services)
-				},
-			},
-			cli.Command{
-				Name:    "deregister",
-				Aliases: []string{"dr"},
-				Usage:   "Deregister a service",
-				//Flags:   append([]cli.Flag{}, queryOptionFlags()...),
-				Action: func(c *cli.Context) {
-					log.Fatal("TODO: implement")
-					//cc := consulClient(c)
-
-					//if err != nil {
-					//log.Fatalf("failed to fetch services: %v", err)
-					//}
-					//prettyPrint(services)
 				},
 			},
 		},

@@ -24,7 +24,7 @@ func agentCommand() cli.Command {
 	return cli.Command{
 		Name:    "agent",
 		Aliases: []string{"a"},
-		Usage:   "Agent endpoint",
+		Usage:   "agent related actions",
 		Action: func(c *cli.Context) {
 			cli.ShowSubcommandHelp(c)
 			os.Exit(1)
@@ -33,7 +33,7 @@ func agentCommand() cli.Command {
 			cli.Command{
 				Name:    "checks",
 				Aliases: []string{"c"},
-				Usage:   "Agent checks",
+				Usage:   "list of defined agent checks",
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
 					checks, err := cc.Agent().Checks()
@@ -46,7 +46,7 @@ func agentCommand() cli.Command {
 			cli.Command{
 				Name:    "services",
 				Aliases: []string{"srv"},
-				Usage:   "Agent services",
+				Usage:   "list agent services",
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
 					services, err := cc.Agent().Services()
@@ -59,7 +59,7 @@ func agentCommand() cli.Command {
 			cli.Command{
 				Name:    "members",
 				Aliases: []string{"m"},
-				Usage:   "Agent members",
+				Usage:   "list known members",
 				Flags:   []cli.Flag{wanFlag},
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
@@ -74,7 +74,7 @@ func agentCommand() cli.Command {
 			cli.Command{
 				Name:    "self",
 				Aliases: []string{"s"},
-				Usage:   "agent specific information",
+				Usage:   "retrieve agent information",
 				Action: func(c *cli.Context) {
 					cc := consulClient(c)
 					self, err := cc.Agent().Self()
@@ -87,7 +87,7 @@ func agentCommand() cli.Command {
 			cli.Command{
 				Name:    "maintenance",
 				Aliases: []string{"maint"},
-				Usage:   "agent maintenance",
+				Usage:   "manage agent maintenance",
 				Action: func(c *cli.Context) {
 					cli.ShowSubcommandHelp(c)
 					os.Exit(1)

@@ -15,7 +15,7 @@ func eventCommand() cli.Command {
 	return cli.Command{
 		Name:    "event",
 		Aliases: []string{"e"},
-		Usage:   "event endpoint",
+		Usage:   "event related actions",
 		Action: func(c *cli.Context) {
 			cli.ShowSubcommandHelp(c)
 			os.Exit(1)

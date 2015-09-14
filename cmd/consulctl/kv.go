@@ -32,7 +32,7 @@ func kvCommand() cli.Command {
 	return cli.Command{
 		Name:    "key-value",
 		Aliases: []string{"kv"},
-		Usage:   "key-value endpoint",
+		Usage:   "key-value related actions",
 		Action: func(c *cli.Context) {
 			cli.ShowSubcommandHelp(c)
 			os.Exit(1)
